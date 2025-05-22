@@ -1,9 +1,9 @@
 import { ToastContainer } from "react-toastify";
 import { UserProvider } from "./contexts/UserContext";
 import { Route, Routes } from "react-router-dom";
-import SignUp from "./components/SignUp";
-import Profile from "./components/Profile";
-import NotFound from "./components/NotFound";
+import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 
 function App() {
 
@@ -12,8 +12,12 @@ function App() {
       <UserProvider>
         <ToastContainer />
         <Routes>
-          <Route path="/auth/signup" element={<SignUp/>} />
+          {/* auth routes */}
+          <Route path="/auth/signup" element={<SignUp />} />
+          
+          {/* user routes */}
           <Route path="/user/profile" element={<Profile />} />
+          
           <Route path="*" element={<NotFound/>}/>
         </Routes>
       </UserProvider>
