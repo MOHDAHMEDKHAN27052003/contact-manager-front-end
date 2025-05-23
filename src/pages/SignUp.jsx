@@ -7,17 +7,39 @@ import { UserContext } from "../contexts/UserContext";
 
 function SignUp() {
     const { register, handleSubmit } = useForm();
-    const { updateUser } = useContext(UserContext);
+    const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
 
     const onSubmit = (data) => {
-        const userData = {
+        const existingUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+
+        const duplicateEmail = existingUsers.find(user =>
+            user.email === data.email
+        );
+
+        const duplicateContactNo = existingUsers.find(user =>
+            user.contactNo === data.contactNo
+        );
+
+        if (duplicateEmail) {
+            toast.error("Email already exists!");
+            return;
+        } else if (duplicateContactNo) {
+            toast.error("Contact No. already exists!");
+            return;
+        };
+
+        const newUser = {
             id: nanoid(),
             ...data,
         };
 
-        localStorage.setItem("user", JSON.stringify(userData));
-        updateUser(userData);
+        const updatedUsers = [...existingUsers, newUser];
+
+        localStorage.setItem("allUsers", JSON.stringify(updatedUsers));
+        localStorage.setItem("user", JSON.stringify(newUser));
+
+        setUser(newUser);
         toast.success("You've Signed Up successfully!");
         navigate("/user/profile");
     };
@@ -31,7 +53,7 @@ function SignUp() {
     return (
         <>
             <div className="flex justify-center items-center min-h-screen">
-                <form action="" onSubmit={handleSubmit(onSubmit, onError)} className="rounded-2xl p-12 bg-blue-600 text-white">
+                <form onSubmit={handleSubmit(onSubmit, onError)} className="rounded-2xl p-8 bg-blue-600 text-white m-8">
                     <h1 className="text-4xl">Sign Up</h1>
                     <div className="pt-4">
                         <label htmlFor="name" className="text-2xl">Name : </label>
