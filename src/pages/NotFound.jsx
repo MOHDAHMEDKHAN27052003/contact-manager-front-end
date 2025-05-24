@@ -2,7 +2,7 @@ function NotFound() {
     return (
         <>
             <div>
-                <h1>Invalid URL!</h1>
+                <h1>The link you've entered is invalid!</h1>
             </div>
         </>
     );
